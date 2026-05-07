@@ -1,0 +1,314 @@
+<!DOCTYPE html>
+<html lang="fi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Satunnaisen aihe Aliaksen</title>
+    <style>
+        * {
+            box-sizing: border-box;
+        }
+
+        @import url('https://fonts.googleapis.com/css2?family=Comfortaa:wght@300..700&display=swap');
+
+        body { 
+            font-family: 'Comfortaa', sans-serif;
+            background-color: greenyellow;
+            background-image: radial-gradient(#adff2f 1px, transparent 1px);
+            background-size: 20px 20px; /* Легкая сетка из точек */
+            min-height: 100svh; 
+            display: flex;
+            justify-content: center;
+            align-items: center; 
+            margin: 0;
+            padding: 10px; 
+            /*overflow: hidden;*/
+        }
+
+        .container {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center; /* Центрируем контент по вертикали */
+            background: rgba(245, 245, 220, 0.8);
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(255, 255, 255, 0.3);
+            /* Используем 90vh, чтобы дно ВСЕГДА было видно на компе */
+            height: 90vh; 
+            width: 100%;
+            max-width: 1000px; 
+            /* Умеренный паддинг, чтобы не выталкивать контент за пределы */
+            padding: 20px;
+            padding-bottom: 100px; /* Место под кнопку */
+            border-radius: 20px; 
+            position: relative;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.15);
+            text-align: center;
+        }
+
+        button { 
+            width: calc(100% - 4rem); /* Ширина с учетом отступов контейнера */
+            max-width: 400px;
+            min-height: 60px;
+            padding: 15px 30px; 
+            cursor: pointer; 
+            border-radius: 15px; 
+            border: none;
+            font-size: 18px;
+            font-weight: bold;
+            color: white;
+            background: linear-gradient(to bottom, #4CAF50, #2E7D32);
+            box-shadow: 0 6px #1B5E20;
+            transition: all 0.2s ease;
+            
+            /* ФИКСАЦИЯ КНОПКИ */
+            position: absolute;
+            bottom: 40px;  
+            left: 50%;
+            transform: translateX(-50%);
+            margin: 0; /* Убираем авто-отступы */
+            z-index: 10;
+        }
+
+        button:hover {
+            filter: brightness(1.1); /* Слегка подсвечивается при наведении */
+            box-shadow: 0 6px #1B5E20; /* Темная полоса снизу создает эффект толщины */
+        }
+        
+        /* Эффект при нажатии (кнопка вдавливается) */
+        button:active {
+            box-shadow: 0 2px #1B5E20;
+            transform: translateX(-50%) translateY(4px);
+        }
+
+        #themeDisplay { 
+            font-size: clamp(24px, 6vw, 40px);
+            font-weight: bold; 
+            color: #222;
+            transition: all 0.3s ease;
+            margin: 10px 0; /* Минимальный отступ */
+        }
+
+        #img { 
+            max-width: 80%; 
+            max-height: 45vh; 
+            display: none; 
+            border-radius: 15px; 
+            object-fit: contain;
+            box-shadow: 0 10px 20px rgba(0,0,0,0.2);
+            border: 5px solid white;
+            margin: 0; /* Убираем лишние margin, за центровку отвечает container */
+        }
+
+        @media (max-width: 600px) {
+            .container {
+                /* Меняем 100svh на 95svh, чтобы снизу и сверху было видно дно */
+                height: 95svh; 
+                width: 100%;
+                /* Возвращаем скругление углов! */
+                border-radius: 20px; 
+                padding-bottom: 110px;
+            }
+            #img {
+                max-height: 40vh; /* Немного прижмем картинку, чтобы точно влезло дно */
+            }
+        }
+
+        .loading {
+            color: #888;
+            font-style: italic;
+            animation: pulse 1s infinite;
+        }
+
+        @keyframes pulse {
+            0% { opacity: 0.5; }
+            50% { opacity: 1; }
+            100% { opacity: 0.5; }
+        }
+
+        .drum-animation {
+            display: none;
+            font-size: 40px;
+            font-weight: bold;
+            color: #2E7D32;
+            margin: auto;
+        }
+
+        .drum-animation span {
+            display: inline-block;
+            margin: 0 10px;
+            animation: bounce 0.3s ease-in-out infinite alternate;
+        }
+        
+        .drum-animation span:last-child {
+            animation-delay: 0.15s; /* Второе слово прыгает чуть позже */
+        }
+
+        @keyframes bounce {
+            0% { transform: translateY(0); }
+            100% { transform: translateY(-30px); }
+        }
+
+        .flash-now {
+            font-size: 80px;
+            color: #FF5722;
+            font-weight: 900;
+            position: absolute;
+            /* Измените top с 50% на 25% или 30% */
+            top: 45%; 
+            left: 50%;
+            transform: translate(-50%, -50%);
+            z-index: 10;
+            /* Добавим небольшое свечение для эффекта */
+        }
+
+        @keyframes fadeInScale {
+            from { opacity: 0; transform: scale(0.9); }
+            to { opacity: 1; transform: scale(1); }
+        }
+
+        #themeDisplay:not(:empty) {
+            animation: fadeInScale 0.4s ease-out forwards;
+        }
+
+        @media (orientation: landscape) and (max-height: 500px) {
+            body { 
+                padding: 5px; /* Минимальный отступ боком */
+            }
+            .container {
+                flex-direction: row; 
+                justify-content: center; 
+                height: 95svh; /* Тоже чуть меньше 100 */
+                width: 98vw;
+                border-radius: 15px; /* Закругляем углы боком */
+                gap: 5vw; 
+                padding: 10px 20px 70px 20px; 
+            }
+            #img {
+                max-height: 60vh;
+                margin: 0;
+            }
+            #themeDisplay {
+                margin: 0;
+                text-align: left;
+            }
+            button {
+                bottom: 15px; 
+            }
+        }
+
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div id="loader" class="drum-animation"><span>No...</span> <span>NiiN...</span></div>
+        <img id="img" src="" alt="teeman kuva">
+        <div id="themeDisplay"></div>
+        <button id="btn">Satunnaisen aihe</button> <!-- Кнопка теперь последняя -->
+    </div>
+    <script>
+        const themes = [
+            "pantomiimi", "pantomiimi", "pantomiimi",
+            "piirtäminen", "piirtäminen", "piirtäminen",
+            "espanja",
+            "ilman verbejä",
+            "ilman substantiivia",
+            "vastakohdan kautta",
+            "kaksi ehtoa",
+            "elokuva",
+            "perusvaihtoehto"];
+
+        const themeImages = {
+            "pantomiimi": "https://images.meme-arsenal.com/f015968d1cd2af0f67b3504e0bc95358.jpg",
+            "piirtäminen": "https://static.boredpanda.com/blog/wp-content/uploads/2019/09/guy-draws-his-dog-badly-doodles-jay-cartner-7-5d70b3c5d5a64__700.jpg",
+            "espanja": "https://i.imgflip.com/698jki.jpg",
+            "ilman verbejä": "",
+            "ilman substantiivia": "",
+            "vastakohdan kautta": "",
+            "kaksi ehtoa": "",
+            "elokuva": "",
+            "perusvaihtoehto": ""
+        };
+
+        const themeSounds = {
+            "pantomiimi": "",
+            "piirtäminen": "https://static.wikia.nocookie.net/soundeffects/images/3/3b/Unknown_Crayon_Drawing_Sound.ogg/revision/latest?cb=20231030180148",
+            "espanja": "",
+            "ilman verbejä": "",
+            "ilman substantiivia": "",
+            "vastakohdan kautta": "",
+            "kaksi ehtoa": "https://static.wikia.nocookie.net/soundeffects/images/0/07/Bruh_Sound_Effect.ogg/revision/latest?cb=20240412094905",
+            "elokuva": "https://static.wikia.nocookie.net/soundeffects/images/a/a9/Wilhelm_Scream_1.ogg/revision/latest?cb=20191210223727",
+            "perusvaihtoehto": ""
+        };
+
+        const btn = document.getElementById("btn");
+        const themeDisplay = document.getElementById("themeDisplay");
+        const themeImage = document.getElementById("img");
+        const loader = document.getElementById("loader");
+        
+        // Общий звук клика
+        const clickSound = new Audio("https://static.wikia.nocookie.net/soundeffects/images/3/3c/Sound_Ideas%2C_CARTOON%2C_ACCENT_-_ZIP%2C_BONKS%2C_POPS.ogg/revision/latest?cb=20171202125231");
+        const drumRoll = new Audio("https://static.wikia.nocookie.net/soundeffects/images/f/f1/Hollywoodedge%2C_Snare_Drum_Roll_End_CRT042801.ogg/revision/latest?cb=20200517111758");
+
+        const randomizeTheme = () => {
+            btn.disabled = true;
+            btn.style.opacity = "0.7";
+            
+            themeDisplay.textContent = "";
+            themeImage.style.display = "none";
+            loader.style.display = "block"; 
+
+            drumRoll.currentTime = 3;
+            drumRoll.play();
+
+            setTimeout(() => {
+                loader.style.display = "none";
+
+                const nyt = document.createElement('div');
+                nyt.className = 'flash-now';
+                nyt.textContent = 'NYT!';
+                document.querySelector('.container').appendChild(nyt);
+
+                if (navigator.vibrate) navigator.vibrate(100);
+
+                setTimeout(() => {
+                    nyt.remove(); 
+                    
+                    const randomIndex = Math.floor(Math.random() * themes.length);
+                    const randomTheme = themes[randomIndex];
+
+                    // TÄMÄ RIVI PUUTTUI: asetetaan teksti näkyviin
+                    themeDisplay.textContent = randomTheme;
+
+                const imageUrl = themeImages[randomTheme];
+                const isLandscape = window.innerHeight < 500 && window.innerWidth > window.innerHeight;
+
+                if (imageUrl && imageUrl !== "") {
+                    themeImage.src = imageUrl;
+                    themeImage.style.display = "block";
+                    // Убираем все marginTop, которые мы добавляли вручную
+                    themeDisplay.style.marginTop = isLandscape ? "0" : "20px";
+                } else {
+                    themeImage.style.display = "none";
+                    themeDisplay.style.marginTop = "0";
+                }
+
+                    const soundUrl = themeSounds[randomTheme];
+                    if (soundUrl) {
+                        const themeAudio = new Audio(soundUrl);
+                        themeAudio.play();
+                    }
+
+                    btn.disabled = false;
+                    btn.style.opacity = "1";
+                }, 400); 
+
+            }, 2500); 
+        };
+
+        btn.addEventListener("click", randomizeTheme);
+    </script>
+</body>
+</html>
+
