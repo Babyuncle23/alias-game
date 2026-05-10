@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Satunnaisen aihe Aliakseen</title>
+    <title>Satunnaisen ehto Aliakseen</title>
     <style>
         * {
             box-sizing: border-box;
@@ -204,7 +204,7 @@
         <div id="loader" class="drum-animation"><span>No...</span> <span>NiiN...</span></div>
         <img id="img" src="" alt="teeman kuva">
         <div id="themeDisplay"></div>
-        <button id="btn">Satunnainen aihe</button> <!-- Кнопка теперь последняя -->
+        <button id="btn">Satunnainen ehto</button> <!-- Кнопка теперь последняя -->
     </div>
     <script>
         const themes = [
@@ -216,7 +216,8 @@
             "vastakohdan kautta",
             "kaksi ehtoa",
             "elokuva",
-            "perusvaihtoehto"];
+            "perusvaihtoehto", 
+            "vapaavalintainen"];
 
         const themeImages = {
             "pantomiimi": "https://images.meme-arsenal.com/f015968d1cd2af0f67b3504e0bc95358.jpg",
@@ -227,7 +228,8 @@
             "vastakohdan kautta": "",
             "kaksi ehtoa": "",
             "elokuva": "",
-            "perusvaihtoehto": ""
+            "perusvaihtoehto": "",
+            "vapaavalintainen": ""
         };
 
         const themeSounds = {
@@ -239,7 +241,8 @@
             "vastakohdan kautta": "",
             "kaksi ehtoa": "https://static.wikia.nocookie.net/soundeffects/images/0/07/Bruh_Sound_Effect.ogg/revision/latest?cb=20240412094905",
             "elokuva": "https://static.wikia.nocookie.net/soundeffects/images/a/a9/Wilhelm_Scream_1.ogg/revision/latest?cb=20191210223727",
-            "perusvaihtoehto": ""
+            "perusvaihtoehto": "",
+            "vapaavalintainen": ""
         };
 
         const btn = document.getElementById("btn");
